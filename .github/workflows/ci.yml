@@ -1,0 +1,54 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate-skills:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check every skill has a SKILL.md
+        run: |
+          set -euo pipefail
+          for d in */; do
+            slug="${d%/}"
+            case "$slug" in
+              .github|node_modules) continue ;;
+            esac
+            if [ ! -f "$slug/SKILL.md" ]; then
+              echo "✖ missing $slug/SKILL.md"
+              exit 1
+            fi
+            echo "✓ $slug/SKILL.md"
+          done
+      - name: Check frontmatter required keys
+        run: |
+          set -euo pipefail
+          missing=0
+          for f in */SKILL.md; do
+            for key in name description type version; do
+              if ! head -10 "$f" | grep -q "^${key}: "; then
+                echo "✖ $f missing frontmatter key: $key"
+                missing=1
+              fi
+            done
+          done
+          if [ "$missing" -ne 0 ]; then exit 1; fi
+          echo "✓ all frontmatter keys present"
+      - name: Check frontmatter `name` matches folder
+        run: |
+          set -euo pipefail
+          mismatch=0
+          for f in */SKILL.md; do
+            folder="$(dirname "$f")"
+            name="$(head -10 "$f" | sed -n 's/^name: //p' | head -1)"
+            if [ "$folder" != "$name" ]; then
+              echo "✖ $f: folder is '$folder' but frontmatter name is '$name'"
+              mismatch=1
+            fi
+          done
+          if [ "$mismatch" -ne 0 ]; then exit 1; fi
+          echo "✓ all folder/name pairs match"
