@@ -17,6 +17,15 @@ npx skills add Try-Operon/skills --skill operon-publish
 
 # Run a fresh mining pass on a recurring cadence
 npx skills add Try-Operon/skills --skill operon-mine
+
+# Search the team catalog for a shared operon
+npx skills add Try-Operon/skills --skill search-operons
+
+# Install a specific operon into your local agents
+npx skills add Try-Operon/skills --skill install-operon
+
+# Or add all of them at once
+npx skills add Try-Operon/skills
 ```
 
 Each command drops a `SKILL.md` under `~/.claude/skills/<name>/`
@@ -29,6 +38,8 @@ Each command drops a `SKILL.md` under `~/.claude/skills/<name>/`
 | [`operon-setup`](./operon-setup/SKILL.md) | One-shot first-run: install the CLI, sign in via the browser, detect AI tools, pick a workspace, mine the first candidates. |
 | [`operon-publish`](./operon-publish/SKILL.md) | Walks the user through picking one of their drafts and shipping it to their team. |
 | [`operon-mine`](./operon-mine/SKILL.md) | Run a fresh mining pass against the user's Claude Code / Codex / Cursor sessions. Recurring loop. |
+| [`search-operons`](./search-operons/SKILL.md) | Search the Operon catalog for shared operons published by engineering teams. |
+| [`install-operon`](./install-operon/SKILL.md) | Install a specific operon (versioned AI skill) into Claude Code, Codex, and Cursor. |
 
 ## Alternate install path
 
